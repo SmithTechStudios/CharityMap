@@ -13,6 +13,11 @@
     // Bundler mode provides a smoother developer experience.
     "module": "preserve",
     "moduleResolution": "bundler",
+     "paths": {
+      "#build/ui": [
+        "./node_modules/.nuxt-ui/ui"
+      ]
+    },
 
     // Include Node.js types and avoid accidentally including other `@types/*` packages.
     "types": ["node"],
