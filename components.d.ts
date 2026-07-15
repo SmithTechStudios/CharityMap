@@ -13,11 +13,14 @@ declare module 'vue' {
   export interface GlobalComponents {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    UAlert: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+e_0a3a02e65e531c1c84d6d2f7ac718ab1/node_modules/@nuxt/ui/dist/runtime/components/Alert.vue')['default']
-    UApp: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+e_0a3a02e65e531c1c84d6d2f7ac718ab1/node_modules/@nuxt/ui/dist/runtime/components/App.vue')['default']
-    UBadge: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+e_0a3a02e65e531c1c84d6d2f7ac718ab1/node_modules/@nuxt/ui/dist/runtime/components/Badge.vue')['default']
-    UCard: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+e_0a3a02e65e531c1c84d6d2f7ac718ab1/node_modules/@nuxt/ui/dist/runtime/components/Card.vue')['default']
-    UFormField: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+e_0a3a02e65e531c1c84d6d2f7ac718ab1/node_modules/@nuxt/ui/dist/runtime/components/FormField.vue')['default']
-    USelect: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+e_0a3a02e65e531c1c84d6d2f7ac718ab1/node_modules/@nuxt/ui/dist/runtime/components/Select.vue')['default']
+    UAlert: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Alert.vue')['default']
+    UApp: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/App.vue')['default']
+    UBadge: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Badge.vue')['default']
+    UButton: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Button.vue')['default']
+    UCard: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Card.vue')['default']
+    UFormField: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/FormField.vue')['default']
+    UInput: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
+    UInputMenu: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/InputMenu.vue')['default']
+    USelect: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Select.vue')['default']
   }
 }
