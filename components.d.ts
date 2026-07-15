@@ -19,8 +19,7 @@ declare module 'vue' {
     UButton: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Button.vue')['default']
     UCard: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Card.vue')['default']
     UFormField: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/FormField.vue')['default']
-    UInput: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
+    UIcon: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/vue/components/Icon.vue')['default']
     UInputMenu: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/InputMenu.vue')['default']
-    USelect: typeof import('./node_modules/.pnpm/@nuxt+ui@4.8.1_@internationalized+date@3.12.2_@internationalized+number@3.6.7_@tiptap+extensi_d57i5jmaukkysshf37na7yvm4e/node_modules/@nuxt/ui/dist/runtime/components/Select.vue')['default']
   }
 }

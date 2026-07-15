@@ -1,6 +1,23 @@
 <template>
   <UApp>
-    <div class="relative flex h-screen w-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+    <div v-if="isLoading"
+      class="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <div class="flex flex-col items-center gap-4">
+        <UIcon name="i-lucide-loader-circle" class="h-10 w-10 animate-spin text-primary" />
+        <p class="text-sm text-muted">Loading charities&hellip;</p>
+      </div>
+    </div>
+
+    <div v-else-if="error"
+      class="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <div class="flex flex-col items-center gap-4 max-w-md text-center">
+        <UIcon name="i-lucide-circle-alert" class="h-10 w-10 text-red-500" />
+        <p class="text-sm text-muted">{{ error }}</p>
+        <UButton label="Retry" color="primary" @click="retry" />
+      </div>
+    </div>
+
+    <div v-else class="relative flex h-screen w-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <UButton
         :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
         color="neutral"
@@ -91,8 +108,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, inject } from 'vue'
 import Map from './map.vue'
+import { useCharities, type Charity } from './useCharities'
 
 const isDark = ref(document.documentElement.classList.contains('dark'))
 
@@ -101,198 +119,8 @@ function toggleDarkMode() {
   document.documentElement.classList.toggle('dark', isDark.value)
 }
 
-export type Charity = {
-  name: string
-  logo: string
-  address: string
-  ceo: string
-  activeCounties: string[]
-  headOffice: { lat: number; lon: number }
-  tags: string[]
-}
-
-const charities = ref<Charity[]>([
-  {
-    name: 'Bright Futures Trust',
-    logo: 'https://picsum.photos/seed/bf/200',
-    address: '14 King Street, London',
-    ceo: 'Eleanor Hughes',
-    activeCounties: ['Greater London', 'Surrey', 'Kent'],
-    headOffice: { lat: 51.5074, lon: -0.1278 },
-    tags: ['education', 'youth', 'community'],
-  },
-  {
-    name: 'Northern Hearts Foundation',
-    logo: 'https://picsum.photos/seed/nh/200',
-    address: '82 Deansgate, Manchester',
-    ceo: 'David Butterworth',
-    activeCounties: ['Lancashire', 'Cheshire', 'Derbyshire'],
-    headOffice: { lat: 53.4808, lon: -2.2426 },
-    tags: ['health', 'elderly', 'wellbeing'],
-  },
-  {
-    name: 'Green Coast Alliance',
-    logo: 'https://picsum.photos/seed/gc/200',
-    address: '7 Harbour View, Plymouth',
-    ceo: 'Sarah Penrose',
-    activeCounties: ['Devon', 'Cornwall', 'Dorset'],
-    headOffice: { lat: 50.3755, lon: -4.1427 },
-    tags: ['environment', 'wildlife', 'conservation'],
-  },
-  {
-    name: 'Midlands Youth Network',
-    logo: 'https://picsum.photos/seed/my/200',
-    address: '31 Corporation Street, Birmingham',
-    ceo: 'Marcus Taylor',
-    activeCounties: ['Warwickshire', 'Staffordshire', 'Worcestershire'],
-    headOffice: { lat: 52.4862, lon: -1.8904 },
-    tags: ['youth', 'education', 'sport'],
-  },
-  {
-    name: 'Harbour Hope',
-    logo: 'https://picsum.photos/seed/hh/200',
-    address: '5 Quayside, Bristol',
-    ceo: 'Fiona Watts',
-    activeCounties: ['Somerset', 'Wiltshire', 'Devon'],
-    headOffice: { lat: 51.4545, lon: -2.5879 },
-    tags: ['homelessness', 'community', 'wellbeing'],
-  },
-  {
-    name: 'Scottish Wildlife Rescue',
-    logo: 'https://picsum.photos/seed/sw/200',
-    address: '19 Royal Mile, Edinburgh',
-    ceo: 'Angus MacLeod',
-    activeCounties: ['Scotland', 'Northumberland', 'Cumbria'],
-    headOffice: { lat: 55.9533, lon: -3.1883 },
-    tags: ['wildlife', 'conservation', 'environment'],
-  },
-  {
-    name: 'Stepping Stones Autism',
-    logo: 'https://picsum.photos/seed/ss/200',
-    address: '22 Park Lane, Leeds',
-    ceo: 'Rachel Okonkwo',
-    activeCounties: ['Yorkshire', 'Lancashire', 'Derbyshire'],
-    headOffice: { lat: 53.8008, lon: -1.5491 },
-    tags: ['autism', 'disability', 'education'],
-  },
-  {
-    name: 'Thames Valley Carers',
-    logo: 'https://picsum.photos/seed/tv/200',
-    address: '88 Bridge Street, Reading',
-    ceo: 'Jonathan Webb',
-    activeCounties: ['Berkshire', 'Oxfordshire', 'Buckinghamshire'],
-    headOffice: { lat: 51.4543, lon: -0.9781 },
-    tags: ['elderly', 'health', 'carers'],
-  },
-  {
-    name: 'Lakeland Community Trust',
-    logo: 'https://picsum.photos/seed/lc/200',
-    address: '3 Market Square, Kendal',
-    ceo: 'Patricia Hodgson',
-    activeCounties: ['Cumbria', 'Lancashire', 'Yorkshire'],
-    headOffice: { lat: 54.3269, lon: -2.7461 },
-    tags: ['community', 'environment', 'sport'],
-  },
-  {
-    name: 'East Anglia Mind Matters',
-    logo: 'https://picsum.photos/seed/ea/200',
-    address: '41 Elm Hill, Norwich',
-    ceo: 'Simon Blackwell',
-    activeCounties: ['Norfolk', 'Suffolk', 'Cambridgeshire'],
-    headOffice: { lat: 52.6309, lon: 1.2974 },
-    tags: ['mental health', 'wellbeing', 'youth'],
-  },
-  {
-    name: 'Welsh Valleys Aid',
-    logo: 'https://picsum.photos/seed/wv/200',
-    address: '15 High Street, Merthyr Tydfil',
-    ceo: 'Rhiannon Davies',
-    activeCounties: ['Wales', 'Herefordshire', 'Shropshire'],
-    headOffice: { lat: 51.7485, lon: -3.3781 },
-    tags: ['community', 'education', 'homelessness'],
-  },
-  {
-    name: 'Sunrise Disability Support',
-    logo: 'https://picsum.photos/seed/sd/200',
-    address: '60 Queen Street, Cardiff',
-    ceo: 'Owen Griffiths',
-    activeCounties: ['Wales', 'Somerset', 'Herefordshire'],
-    headOffice: { lat: 51.4816, lon: -3.1791 },
-    tags: ['disability', 'autism', 'carers'],
-  },
-  {
-    name: 'Pennine Rescue Dogs',
-    logo: 'https://picsum.photos/seed/pr/200',
-    address: '9 Chapel Walk, Sheffield',
-    ceo: 'Karen Mitchell',
-    activeCounties: ['Yorkshire', 'Derbyshire', 'Nottinghamshire'],
-    headOffice: { lat: 53.3811, lon: -1.4701 },
-    tags: ['wildlife', 'conservation', 'community'],
-  },
-  {
-    name: 'Highlands Heritage Fund',
-    logo: 'https://picsum.photos/seed/hf/200',
-    address: '2 Castle Road, Inverness',
-    ceo: 'Iain Campbell',
-    activeCounties: ['Scotland', 'Northumberland', 'Durham'],
-    headOffice: { lat: 57.4778, lon: -4.2247 },
-    tags: ['heritage', 'community', 'environment'],
-  },
-  {
-    name: 'Liverpool Kids First',
-    logo: 'https://picsum.photos/seed/lk/200',
-    address: '33 Bold Street, Liverpool',
-    ceo: 'Tracey O\'Brien',
-    activeCounties: ['Lancashire', 'Cheshire', 'Staffordshire'],
-    headOffice: { lat: 53.4084, lon: -2.9916 },
-    tags: ['youth', 'education', 'sport'],
-  },
-  {
-    name: 'Sussex Dementia Care',
-    logo: 'https://picsum.photos/seed/sdc/200',
-    address: '12 The Lanes, Brighton',
-    ceo: 'Michael Ashworth',
-    activeCounties: ['Sussex', 'Surrey', 'Kent'],
-    headOffice: { lat: 50.8225, lon: -0.1372 },
-    tags: ['elderly', 'health', 'carers'],
-  },
-  {
-    name: 'Tyne & Wear Foodbank',
-    logo: 'https://picsum.photos/seed/tw/200',
-    address: '27 Grey Street, Newcastle',
-    ceo: 'Laura Henderson',
-    activeCounties: ['Northumberland', 'Durham', 'Yorkshire'],
-    headOffice: { lat: 54.9783, lon: -1.6178 },
-    tags: ['homelessness', 'community', 'health'],
-  },
-  {
-    name: 'Cotswold Conservation',
-    logo: 'https://picsum.photos/seed/cc/200',
-    address: '8 Market Place, Cirencester',
-    ceo: 'Helen Barker',
-    activeCounties: ['Oxfordshire', 'Wiltshire', 'Worcestershire'],
-    headOffice: { lat: 51.7143, lon: -1.9686 },
-    tags: ['conservation', 'environment', 'heritage'],
-  },
-  {
-    name: 'Belfast Together',
-    logo: 'https://picsum.photos/seed/bt/200',
-    address: '50 Donegall Place, Belfast',
-    ceo: 'Conor Murray',
-    activeCounties: ['Northern Ireland', 'Scotland', 'Cumbria'],
-    headOffice: { lat: 54.5973, lon: -5.9301 },
-    tags: ['community', 'youth', 'mental health'],
-  },
-  {
-    name: 'Fenland Sports Foundation',
-    logo: 'https://picsum.photos/seed/fs/200',
-    address: '4 Cathedral Square, Peterborough',
-    ceo: 'James Whitfield',
-    activeCounties: ['Cambridgeshire', 'Lincolnshire', 'Norfolk'],
-    headOffice: { lat: 52.5695, lon: -0.2405 },
-    tags: ['sport', 'youth', 'disability'],
-  },
-])
+const dataUrl = inject<string>('dataUrl', '/sample-charities.json')
+const { charities, isLoading, error, retry } = useCharities(dataUrl)
 
 const ALL_KEY = '__all__'
 
