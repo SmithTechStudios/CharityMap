@@ -13,16 +13,20 @@ function cssInjectedByJs(): Plugin {
     enforce: 'post',
     generateBundle(_, bundle) {
       const cssChunks: string[] = []
+
       for (const [key, chunk] of Object.entries(bundle)) {
         if (chunk.type === 'asset' && key.endsWith('.css')) {
           cssChunks.push(String(chunk.source))
           delete bundle[key]
         }
       }
+
       if (cssChunks.length === 0) return
+
       const css = cssChunks.join('\n')
       const escaped = css.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$')
       const injection = `(function(){var s=document.createElement('style');s.textContent=\`${escaped}\`;document.head.appendChild(s)})();`
+
       for (const chunk of Object.values(bundle)) {
         if (chunk.type === 'chunk' && chunk.isEntry) {
           chunk.code = injection + chunk.code
@@ -49,11 +53,11 @@ export default defineConfig(({ command, mode }) => ({
   },
   build: {
     cssCodeSplit: false,
-    rollupOptions: {
-      output: {
-        codeSplitting: false,
-        entryFileNames: 'charity-map.js',
-      },
+    lib: {
+      entry: fileURLToPath(new URL('./src/main.ts', import.meta.url)),
+      name: 'CharityMapEmbed',
+      formats: ['iife'],
+      fileName: () => 'charity-map.js',
     },
   },
 }))
