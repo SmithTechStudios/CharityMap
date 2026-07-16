@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+#charity-map {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+[data-slot="content"] {
+  z-index: 10000 !important;
+}

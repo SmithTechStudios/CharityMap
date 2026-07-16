@@ -17,28 +17,29 @@
       </div>
     </div>
 
-    <div v-else class="relative flex h-screen w-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+    <div v-else class="charity-map-embed relative flex min-h-[900px] w-full max-w-full overflow-visible bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <UButton :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'" color="neutral" variant="ghost" size="lg"
         class="absolute top-4 right-4 z-50" @click="toggleDarkMode" />
       <div
         class="flex h-full w-1/2 flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <header class="shrink-0 border-b border-gray-200 dark:border-gray-800 px-6 py-5">
+        <header class="relative z-20 shrink-0 overflow-visible border-b border-gray-200 dark:border-gray-800 px-6 py-5">
           <p class="text-lg font-semibold text-highlighted">Charities</p>
           <p class="mt-1 text-sm text-muted">Browse organisations on the map and in the list.</p>
           <div v-if="selectedCounty" class="mt-2 flex items-center gap-2">
             <UBadge :label="`Filtered by: ${selectedCounty}`" color="primary" variant="subtle" size="md" />
-            <UButton label="Clear" color="neutral" variant="ghost" size="xs" @click="selectedCounty = null" />
+            <UButton label="Clear" color="neutral" variant="ghost" size="xs" @click="clearCountyFilter" />
           </div>
           <div class="mt-4 flex gap-3">
-            <UFormField label="Search & filter" class="flex-1">
+            <UFormField label="Search & filter" class="relative z-20 flex-1">
               <UInputMenu v-model="displayedKeys" v-model:open="menuOpen" :items="selectItems" label-key="name"
                 value-key="key" multiple placeholder="Search charities..." icon="i-lucide-search" class="w-full"
-                @focus="menuOpen = true" @click="menuOpen = true" />
+                portal="body" :ui="menuUi" :content="menuContent" @focus="menuOpen = true" @click="menuOpen = true" />
             </UFormField>
-            <UFormField label="Tags" class="flex-1">
+            <UFormField label="Tags" class="relative z-20 flex-1">
               <UInputMenu v-model="displayedTagKeys" v-model:open="tagMenuOpen" :items="tagSelectItems" label-key="name"
                 value-key="key" multiple placeholder="Filter by tags..." icon="i-lucide-tag" class="w-full"
-                @focus="tagMenuOpen = true" @click="tagMenuOpen = true" />
+                portal="body" :ui="menuUi" :content="menuContent" @focus="tagMenuOpen = true"
+                @click="tagMenuOpen = true" />
             </UFormField>
           </div>
         </header>
@@ -106,7 +107,7 @@
 <script setup lang="ts">
 import { computed, ref, inject } from 'vue'
 import Map from './map.vue'
-import { useCharities, type Charity, type CharityDataSource } from './useCharities'
+import { useCharities, type Charity } from './useCharities'
 
 const isDark = ref(document.documentElement.classList.contains('dark'))
 
@@ -115,8 +116,11 @@ function toggleDarkMode() {
   document.documentElement.classList.toggle('dark', isDark.value)
 }
 
-const dataUrl = inject<string>('dataUrl', '/sample-charities.json')
-const { charities, isLoading, error, retry } = useCharities(dataUrl)
+const getCharities = inject<() => Charity[]>('getCharities', () => [])
+const { charities, isLoading, error, retry } = useCharities(getCharities)
+
+const menuUi = { content: 'z-[10000]' }
+const menuContent = { side: 'bottom' as const, sideOffset: 8, collisionPadding: 16, position: 'popper' as const, strategy: 'fixed' as const }
 
 const ALL_KEY = '__all__'
 
@@ -235,6 +239,10 @@ function onMarkerClick(markerId: string) {
 }
 
 const selectedCounty = ref<string | null>(null)
+
+function clearCountyFilter() {
+  selectedCounty.value = null
+}
 
 function toggleCounty(countyName: string) {
   selectedCounty.value = selectedCounty.value === countyName ? null : countyName

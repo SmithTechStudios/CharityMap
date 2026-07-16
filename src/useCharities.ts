@@ -10,27 +10,17 @@ export type Charity = {
   tags: string[]
 }
 
-export type CharityDataSource =
-  | { type: 'inline'; data: Charity[] }
-  | { type: 'url'; url: string }
-
-export function useCharities(source: CharityDataSource) {
+export function useCharities(getCharities: () => Charity[]) {
   const charities = ref<Charity[]>([]) as Ref<Charity[]>
   const isLoading = ref(true)
   const error = ref<string | null>(null)
 
-  async function load() {
+  function load() {
     isLoading.value = true
     error.value = null
-    try {
-      if (source.type === 'inline') {
-        charities.value = source.data
-        return
-      }
 
-      const res = await fetch(source.url)
-      if (!res.ok) throw new Error(`Failed to load charities (${res.status})`)
-      charities.value = await res.json()
+    try {
+      charities.value = getCharities()
     } catch (e) {
       error.value = e instanceof Error ? e.message : String(e)
     } finally {

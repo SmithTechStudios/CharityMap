@@ -7,7 +7,29 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div id="charity-map" class="isolate"></div>
+    <script id="charity-map-data" type="application/json">
+      [
+        {
+          "name": "Bright Futures Trust",
+          "logo": "https://picsum.photos/seed/bf/200",
+          "address": "14 King Street, London",
+          "ceo": "Eleanor Hughes",
+          "activeCounties": ["Greater London", "Surrey", "Kent"],
+          "headOffice": { "lat": 51.5074, "lon": -0.1278 },
+          "tags": ["education", "youth", "community"]
+        },
+        {
+          "name": "Northern Hearts Foundation",
+          "logo": "https://picsum.photos/seed/nh/200",
+          "address": "82 Deansgate, Manchester",
+          "ceo": "David Butterworth",
+          "activeCounties": ["Lancashire", "Cheshire", "Derbyshire"],
+          "headOffice": { "lat": 53.4808, "lon": -2.2426 },
+          "tags": ["health", "elderly", "wellbeing"]
+        }
+      ]
+    </script>
+    <div id="charity-map"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

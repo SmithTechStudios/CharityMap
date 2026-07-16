@@ -1,6 +1,5 @@
-import type { Charity, CharityDataSource } from './useCharities'
+import type { Charity } from './useCharities'
 
-const DEFAULT_DATA_URL = '/sample-charities.json'
 const DEFAULT_JSON_ID = 'charity-map-data'
 
 function parseInlineJson(text: string): Charity[] {
@@ -11,15 +10,25 @@ function parseInlineJson(text: string): Charity[] {
   return data
 }
 
-export function resolveDataSource(mountEl: HTMLElement): CharityDataSource {
+export function resolveCharities(mountEl: HTMLElement): Charity[] {
   const jsonId = mountEl.dataset.jsonId || DEFAULT_JSON_ID
   const jsonEl = document.getElementById(jsonId)
 
-  if (jsonEl?.textContent?.trim()) {
-    return { type: 'inline', data: parseInlineJson(jsonEl.textContent) }
+  if (!jsonEl) {
+    throw new Error(
+      `Missing #${jsonId} script tag. Add your JSON array in <script id="${jsonId}" type="application/json">...</script> before charity-map.js.`,
+    )
   }
 
-  const queryDataUrl = new URLSearchParams(window.location.search).get('data')
-  const url = queryDataUrl || mountEl.dataset.src || DEFAULT_DATA_URL
-  return { type: 'url', url }
+  const raw = jsonEl.textContent?.trim()
+  if (!raw) {
+    throw new Error(`#${jsonId} is empty. Paste your JSON array inside the script tag.`)
+  }
+
+  try {
+    return parseInlineJson(raw)
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e)
+    throw new Error(`Invalid JSON in #${jsonId}: ${message}`)
+  }
 }
