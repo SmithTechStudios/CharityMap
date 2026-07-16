@@ -1,7 +1,7 @@
 <template>
   <UApp>
     <div v-if="isLoading"
-      class="flex h-screen w-full  items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      class="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <div class="flex flex-col items-center gap-4">
         <UIcon name="i-lucide-loader-circle" class="h-10 w-10 animate-spin text-primary" />
         <p class="text-sm text-muted">Loading charities&hellip;</p>
@@ -64,8 +64,9 @@
                       <p class="font-semibold text-highlighted">{{ charity.name }}</p>
                       <p class="text-sm text-muted">{{ charity.address }}</p>
                     </div>
-                    <p class="text-xs text-muted">{{ selectedCharity === charity ? 'Click to deselect' : 'Click to show
-                      on map' }}</p>
+                    <p class="text-xs text-muted">
+                      {{ selectedCharity === charity ? 'Click to deselect' : 'Click to show on map' }}
+                    </p>
                   </div>
                 </template>
 
@@ -114,8 +115,8 @@ function toggleDarkMode() {
   document.documentElement.classList.toggle('dark', isDark.value)
 }
 
-const dataSource = inject<CharityDataSource>('dataSource', { type: 'url', url: '/sample-charities.json' })
-const { charities, isLoading, error, retry } = useCharities(dataSource)
+const dataUrl = inject<string>('dataUrl', '/sample-charities.json')
+const { charities, isLoading, error, retry } = useCharities(dataUrl)
 
 const ALL_KEY = '__all__'
 
