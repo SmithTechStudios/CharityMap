@@ -1,7 +1,7 @@
 <template>
   <UApp>
     <div v-if="isLoading"
-      class="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      class="flex h-screen w-full  items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <div class="flex flex-col items-center gap-4">
         <UIcon name="i-lucide-loader-circle" class="h-10 w-10 animate-spin text-primary" />
         <p class="text-sm text-muted">Loading charities&hellip;</p>
@@ -9,7 +9,7 @@
     </div>
 
     <div v-else-if="error"
-      class="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      class="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <div class="flex flex-col items-center gap-4 max-w-md text-center">
         <UIcon name="i-lucide-circle-alert" class="h-10 w-10 text-red-500" />
         <p class="text-sm text-muted">{{ error }}</p>
@@ -18,15 +18,10 @@
     </div>
 
     <div v-else class="relative flex h-screen w-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-      <UButton
-        :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-        color="neutral"
-        variant="ghost"
-        size="lg"
-        class="absolute top-4 right-4 z-50"
-        @click="toggleDarkMode"
-      />
-      <div class="flex h-full w-1/2 flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+      <UButton :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'" color="neutral" variant="ghost" size="lg"
+        class="absolute top-4 right-4 z-50" @click="toggleDarkMode" />
+      <div
+        class="flex h-full w-1/2 flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
         <header class="shrink-0 border-b border-gray-200 dark:border-gray-800 px-6 py-5">
           <p class="text-lg font-semibold text-highlighted">Charities</p>
           <p class="mt-1 text-sm text-muted">Browse organisations on the map and in the list.</p>
@@ -36,13 +31,13 @@
           </div>
           <div class="mt-4 flex gap-3">
             <UFormField label="Search & filter" class="flex-1">
-              <UInputMenu v-model="displayedKeys" v-model:open="menuOpen" :items="selectItems" label-key="name" value-key="key"
-                multiple placeholder="Search charities..." icon="i-lucide-search" class="w-full"
+              <UInputMenu v-model="displayedKeys" v-model:open="menuOpen" :items="selectItems" label-key="name"
+                value-key="key" multiple placeholder="Search charities..." icon="i-lucide-search" class="w-full"
                 @focus="menuOpen = true" @click="menuOpen = true" />
             </UFormField>
             <UFormField label="Tags" class="flex-1">
-              <UInputMenu v-model="displayedTagKeys" v-model:open="tagMenuOpen" :items="tagSelectItems" label-key="name" value-key="key"
-                multiple placeholder="Filter by tags..." icon="i-lucide-tag" class="w-full"
+              <UInputMenu v-model="displayedTagKeys" v-model:open="tagMenuOpen" :items="tagSelectItems" label-key="name"
+                value-key="key" multiple placeholder="Filter by tags..." icon="i-lucide-tag" class="w-full"
                 @focus="tagMenuOpen = true" @click="tagMenuOpen = true" />
             </UFormField>
           </div>
@@ -54,8 +49,7 @@
 
           <ul v-else class="flex flex-col gap-4">
             <li v-for="charity in filteredCharities" :key="charity.name" @click="toggleCharity(charity)"
-              @mouseenter="hoveredCharity = charity" @mouseleave="hoveredCharity = null"
-              class="cursor-pointer">
+              @mouseenter="hoveredCharity = charity" @mouseleave="hoveredCharity = null" class="cursor-pointer">
               <UCard :title="charity.name" :description="charity.address"
                 class="transition-shadow hover:shadow-md hover:ring-1 hover:ring-gray-300 dark:hover:ring-gray-600"
                 :class="{ 'ring-2 ring-blue-500 dark:ring-blue-400 shadow-md': selectedCharity === charity }">
@@ -70,7 +64,8 @@
                       <p class="font-semibold text-highlighted">{{ charity.name }}</p>
                       <p class="text-sm text-muted">{{ charity.address }}</p>
                     </div>
-                    <p class="text-xs text-muted">{{ selectedCharity === charity ? 'Click to deselect' : 'Click to show on map' }}</p>
+                    <p class="text-xs text-muted">{{ selectedCharity === charity ? 'Click to deselect' : 'Click to show
+                      on map' }}</p>
                   </div>
                 </template>
 
@@ -82,7 +77,8 @@
                   <div v-if="charity.tags.length">
                     <dt class="text-xs font-medium uppercase tracking-wide text-muted">Tags</dt>
                     <dd class="mt-1 flex flex-wrap gap-1">
-                      <UBadge v-for="tag in charity.tags" :key="tag" :label="tag" color="primary" variant="subtle" size="sm" />
+                      <UBadge v-for="tag in charity.tags" :key="tag" :label="tag" color="primary" variant="subtle"
+                        size="sm" />
                     </dd>
                   </div>
                 </dl>
@@ -99,9 +95,8 @@
         </div>
       </div>
       <div class="h-full w-1/2 flex justify-center">
-        <Map :markers="headOfficeMarkers" :highlighted-counties="highlightedCounties"
-          :selected-county="selectedCounty" @county-click="toggleCounty"
-          @marker-hover="onMarkerHover" @marker-click="onMarkerClick" />
+        <Map :markers="headOfficeMarkers" :highlighted-counties="highlightedCounties" :selected-county="selectedCounty"
+          @county-click="toggleCounty" @marker-hover="onMarkerHover" @marker-click="onMarkerClick" />
       </div>
     </div>
   </UApp>
