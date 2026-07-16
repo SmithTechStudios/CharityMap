@@ -51,6 +51,10 @@ export default defineConfig(({ command, mode }) => ({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  define: {
+    'process.env': '{}',
+    process: '{ env: {} }',
+  },
   build: {
     cssCodeSplit: false,
     lib: {
@@ -58,6 +62,11 @@ export default defineConfig(({ command, mode }) => ({
       name: 'CharityMapEmbed',
       formats: ['iife'],
       fileName: () => 'charity-map.js',
+    },
+    rollupOptions: {
+      output: {
+        banner: 'var process=globalThis.process||{env:{}};var global=globalThis;',
+      },
     },
   },
 }))
