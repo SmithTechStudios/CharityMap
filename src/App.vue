@@ -110,7 +110,7 @@
 <script setup lang="ts">
 import { computed, ref, inject } from 'vue'
 import Map from './map.vue'
-import { useCharities, type Charity } from './useCharities'
+import { useCharities, type Charity, type CharityDataSource } from './useCharities'
 
 const isDark = ref(document.documentElement.classList.contains('dark'))
 
@@ -119,8 +119,8 @@ function toggleDarkMode() {
   document.documentElement.classList.toggle('dark', isDark.value)
 }
 
-const dataUrl = inject<string>('dataUrl', '/sample-charities.json')
-const { charities, isLoading, error, retry } = useCharities(dataUrl)
+const dataSource = inject<CharityDataSource>('dataSource', { type: 'url', url: '/sample-charities.json' })
+const { charities, isLoading, error, retry } = useCharities(dataSource)
 
 const ALL_KEY = '__all__'
 
